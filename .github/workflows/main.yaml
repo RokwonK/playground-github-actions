@@ -17,12 +17,15 @@ on: push
 #   - GitHubAction에서 민감한 정보 숨기기
 #   - 배포 키와 같은 것은 소스코드에 넣어 놓으면 안됨! 어떻게 숨길까? - GitHub에서 Secret값 추가
 # phase3 : 협업 시 프레임워크/라이브러리 버전 때문에 충돌이 일어나는 것 어떻게 해결할 수 있을까?
-#   - 
+#   - 모든 os에서 테스트
+#   - 모든 곳에서 matrix message 이용
+#   - condition을 이용해 조건에 맞을때만 테스트(if)
 
 
 jobs:
   first-job:
     name: 'First Job'
+    if: github.event_name == 'pull_request'
 
     strategy:
       matrix:
