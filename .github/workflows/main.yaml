@@ -18,6 +18,7 @@ name: 'SWM GitHub Actions Basic'
 #   - 모든 곳에서 matrix message 이용
 #   - condition을 이용해 조건에 맞을때만 테스트(if)
 #   - 언제 작업할지 명령어를 자세하게 설정(push/branch/tags에 따라)
+#   - job 체이닝 - job이 다른 job에 의존성을 가져 순서대로 실행되야할때
 
 on:
   push:
@@ -33,15 +34,15 @@ on:
 
 jobs:
   first-job:
-  name: 'First Job'
+    name: 'First Job'
 
-  runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-latest'
 
-  steps:
-  - name: 'Say Hello World 1'
-    shell: pwsh
-    run: |
-      echo "hello world from first job"
+    steps:
+    - name: 'Say Hello World 1'
+      shell: pwsh
+      run: |
+        echo "hello world from first job"
 
   second-job:
     name: 'Second Job'
