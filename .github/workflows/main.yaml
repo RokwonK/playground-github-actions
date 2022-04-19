@@ -13,7 +13,8 @@ on: push
 #   - shell 마다 환경변수를 표현하는 방식이 다름(bash, pwsh 등...)
 #   - 런타임에서 환경변수 변경하기(with GITHUB_ENV)
 #   - steps에서 나오는 아웃풋 변수를 이용하기
-#     - 어쩔때 환경변수를 사용하고 어쩔때 아웃풋 값을 사용할까?
+#     - 언제 환경변수를 사용하고 어쩔때 언제 값을 사용할까?
+#   - GitHubAction에서 민감한 정보 숨기기
 
 jobs:
   first-job:
@@ -26,6 +27,7 @@ jobs:
       shell: bash
       run: |
         var_1="This is the value 1 in the step 1"
+        echo "::add-mask::$var_1"
         echo "::set-output name=first_value::$var_1"
 
     - name: 'Check output Value'
