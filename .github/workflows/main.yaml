@@ -3,18 +3,26 @@ name: 'SWM GitHub Actions Basic'
 # push가 일어나면 실행됨
 on: push
 
+env:
+  WORKFLOW_LEVEL: "This value comes from the WORKFLOW level"
+
 # 질문 하나의 잡을 사용하는 것과 두 개의 잡을 사용하는 것에 차이가 있을 까?
 # Job마다 가상머신(빌드 서버)가 하나씩 붙음(window, mac, ubuntu)
-# workflow - jobs - task(steps)
+# workflow - jobs - task(steps)git 
 jobs:
   first-job:
     name: 'First Job'
     # 어떤 가상머신으로 돌릴 것인가
     runs-on: ubuntu-latest
 
+    env:
+      JOB_LEVEL_1: "This value comes from the JOB level 1"
+
     steps:
     - name: 'Say Hello World 1'
       shell: bash
+      env:
+        STEP_LEVEL_1: "This value comes from the STEP level 1"
       run: |
         echo "Hello World from step 1"
     - name: 'Say Hello World 2'
