@@ -38,6 +38,6 @@ jobs:
     - name: Check environment variables
       shell: bash
       run: |
-        echo "preset value: ${{ env.PREST_VALUE }}"
+        echo "preset value: ${{ env.PRESET_VALUE }}"
         echo "stepset value 1: ${{ env.STEPSET_VALUE_1 }}"
         echo "stepset value 2: ${{ env.STEPSET_VALUE_2 }}"
