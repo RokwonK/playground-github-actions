@@ -4,29 +4,40 @@ name: 'SWM GitHub Actions Basic'
 on: push
 
 env:
-  WORKFLOW_LEVEL: "This value comes from the WORKFLOW level"
+  PRESET_VALUE: "This is PRESET value"
 
 # 질문 하나의 잡을 사용하는 것과 두 개의 잡을 사용하는 것에 차이가 있을 까?
-# Job마다 가상머신(빌드 서버)가 하나씩 붙음(window, mac, ubuntu)
-# workflow - jobs - task(steps)git 
+
+
+# 0 phase : 레벨이 나눠짐 - workflow - jobs - task(steps)git
+#   Job마다 가상머신(빌드 서버)가 하나씩 붙음(window, mac, ubuntu)
+# 1 phase : 각 명령어 설명
+# 2 phase : Level마다 env(환경 변수) 넣고 접근범위 확인
+#   - shell 마다 환경변수를 표현하는 방식이 다름(bash, pwsh 등...)
+#   - 런타임에서 환경변수 변경하기(with GITHUB_ENV)
+
 jobs:
   first-job:
     name: 'First Job'
     # 어떤 가상머신으로 돌릴 것인가
     runs-on: ubuntu-latest
 
-    env:
-      JOB_LEVEL_1: "This value comes from the JOB level 1"
-
     steps:
-    - name: 'Say Hello World 1'
+    - name: 'Set environment variable 1'
       shell: bash
-      env:
-        STEP_LEVEL_1: "This value comes from the STEP level 1"
       run: |
-        echo "Hello World from step 1"
+        var_1="This is the value 1 in the step 1"
+        echo "STEPSET_VALUE_1=$var_1" >> $GITHUB_ENV
+
     - name: 'Say Hello World 2'
       shell: pwsh
       run: |
-        echo "Hello World from step 2"
+        $var_2 = "This is the value 2 in the step 2"
+        echo "STEPSET_VALUE_2=$var_2" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append
 
+    - name: Check environment variables
+      shell: bash
+      run: |
+        echo "preset value: ${{ env.PREST_VALUE }}"
+        echo "stepset value 1: ${{ env.STEPSET_VALUE_1 }}"
+        echo "stepset value 2: ${{ env.STEPSET_VALUE_2 }}"
