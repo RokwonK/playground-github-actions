@@ -27,7 +27,8 @@ jobs:
     strategy:
       matrix:
         os: [ 'ubuntu-latest', 'macos-latest', 'window-latest' ]
-    # 3군데에서 다 돌아감
+        message: ['HELLO WORLD', 'LOREM IPSUM' ]
+    # 3가지 OS에서 다 돌아감
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -35,12 +36,11 @@ jobs:
       id: first
       shell: bash
       run: |
-        var_1="This is the value 1 in the step 1"
-        echo "::add-mask::$var_1"
+        var_1="This is the value: ${{ matrix.message }}"
+        
         echo "::set-output name=first_value::$var_1"
 
     - name: 'Check output value on ${{ matrix.os }}'
       shell: pwsh
       run: |
         echo "${{ steps.first.outputs.first_value }}"
-        echo "${{ secrets.HELLO }}"
