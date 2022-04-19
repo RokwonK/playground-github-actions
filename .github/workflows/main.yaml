@@ -25,10 +25,10 @@ jobs:
       shell: bash
       run: |
         var_1="This is the value 1 in the step 1"
-        echo "::set-output name=first_value::$var_2"
+        echo "::set-output name=first_value::$var_1"
 
     - name: 'Check output Value'
       shell: pwsh
       run: |
-        echo ${{ steps.first.outputs.first_value }}
+        echo "${{ steps.first.outputs.first_value }}""
 
