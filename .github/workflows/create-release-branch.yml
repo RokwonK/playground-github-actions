@@ -26,6 +26,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+      
+      - name: Set up Git
+        run: |
+          git config --global user.name 'RokwonK'
+          git config --global user.email 'wonrok@naver.com'
 
       - name: Get latest tag
         id: get-latest-tag
