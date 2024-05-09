@@ -1,9 +1,10 @@
 name: Deploy to Development Environment
 
-on: create
-  # push:
-  #   branches:
-  #     - release/api-v*
+on: 
+  create:
+  push:
+    branches:
+      - release/api-v*
 
 jobs:
   check-branch:
