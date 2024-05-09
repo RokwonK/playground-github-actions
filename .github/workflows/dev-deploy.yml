@@ -16,15 +16,6 @@ jobs:
         id: branch-names
         uses: tj-actions/branch-names@v8
 
-      - name: check current branch
-        run: |
-          echo "${{ steps.branch-names.outputs.current_branch }}"
-      
-      - name: check deploy
-        if: startsWith(${{ needs.check-branch.outputs.current_branch}}, 'release/api-v')
-        run: |
-          echo "dev-deploy"
-
   deploy-development-environment:
     needs: check-branch
     runs-on: 'ubuntu-latest'
