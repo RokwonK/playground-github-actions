@@ -1,6 +1,9 @@
 name: Deploy to Development Environment
 
 on:
+  create:
+    branches:
+      - release/api-v*
   push:
     branches:
       - release/api-v*
