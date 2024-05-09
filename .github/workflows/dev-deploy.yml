@@ -1,0 +1,40 @@
+name: Deploy to Development Environment
+
+on: 
+  create:
+  push:
+    branches:
+      - release/api-v*
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      current_branch: ${{ steps.branch-names.outputs.current_branch }}
+    steps:
+      - name: Get branch names
+        id: branch-names
+        uses: tj-actions/branch-names@v8
+
+      - name: check current branch
+        run: |
+          echo "${{ steps.branch-names.outputs.current_branch }}"
+      
+      - name: check deploy
+        if: startsWith(${{ needs.check-branch.outputs.current_branch}}, 'release/api-v')
+        run: |
+          echo "dev-deploy"
+
+  deploy-development-environment:
+    needs: check-branch
+    runs-on: 'ubuntu-latest'
+    if: startsWith(${{ needs.check-branch.outputs.current_branch}}, 'release/api-v')
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 'Deploy Development Environment'
+        run: |
+          echo "Deploy Development Environment"
