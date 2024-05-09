@@ -23,19 +23,19 @@ jobs:
         id: branch-names
         uses: tj-actions/branch-names@v8
 
-      - name: Get tag
+      - name: Get Tag
         id: get-tag
         run: |
-          branch=${{ steps.branch-name.outputs.current_branch }}
+          branch=${{ steps.branch-names.outputs.current_branch }}
           new_tag="${branch#release/}"
           echo $new_tag
           echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
 
-      - name: Check tag
+      - name: Check Tag
         run: |
           echo ${{ steps.get-tag.outputs.NEW_TAG }}
 
-      - name: Release & Tag 생성
+      - name: Create Release & Tag 
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
