@@ -21,14 +21,7 @@ name: 'GitHub Actions Basic'
 #   - job 체이닝 - job이 다른 job에 의존성을 가져 순서대로 실행되야할때
 
 on:
-  push:
-    branches:
-    - main
-    tags:
-    - 'v*'
-  pull_request:
-    branches:
-    - main
+  workflow_dispatch:
   
 
 
