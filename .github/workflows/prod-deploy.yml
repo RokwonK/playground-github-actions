@@ -1,0 +1,44 @@
+name: Deploy to Production Environment
+
+on: 
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  deploy-production-environment:
+    runs-on: 'ubuntu-latest'
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.MY_TOKEN }}
+          submodules: true
+          fetch-depth: 0
+
+      - name: Get branch names
+        id: branch-names
+        uses: tj-actions/branch-names@v8
+
+      - name: Get tag
+        id: get-tag
+        run: |
+          branch=${{ steps.branch-name.outputs.current_branch }}
+          new_tag="${branch#release/}"
+          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
+
+      - name: Release & Tag 생성
+        if: github.event.pull_request.merged == true
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+        with:
+          tag_name: ${{ steps.get-tag.outputs.NEW_TAG }}
+          release_name: ${{ steps.get-tag.outputs.NEW_TAG }}
+  
+      - name: 'Deploy Production Environment'
+        run: |
+          echo "Deploy Production Environment"

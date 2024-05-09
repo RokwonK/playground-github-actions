@@ -21,7 +21,6 @@ on:
 
 jobs:
   create-branch:
-    name: Create Release Branch
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
