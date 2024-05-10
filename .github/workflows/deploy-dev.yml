@@ -1,4 +1,4 @@
-name: Deploy to Development Environment
+name: Deploy - Development Environment
 
 on: 
   create:

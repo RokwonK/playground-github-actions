@@ -1,4 +1,4 @@
-name: Release Branch Creation
+name: Create Release Branch
 
 on:
   workflow_dispatch:

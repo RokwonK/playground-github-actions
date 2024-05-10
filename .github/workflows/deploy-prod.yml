@@ -1,4 +1,4 @@
-name: Deploy to Production Environment
+name: Deploy - Production Environment
 
 on: 
   pull_request:
@@ -28,7 +28,9 @@ jobs:
         run: |
           branch=${{ steps.branch-names.outputs.current_branch }}
           new_tag="${branch#release/}"
+
           echo $new_tag
+          echo "그냥 가져와 보기 ${{ github.head_ref }}"
           echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
 
       - name: Check Tag
@@ -43,10 +45,8 @@ jobs:
           tag_name: ${{ steps.get-tag.outputs.NEW_TAG }}
           release_name: ${{ steps.get-tag.outputs.NEW_TAG }}
           body: |
-            Changes in this Release - ${{ steps.get-tag.outputs.NEW_TAG }}
-            - First Change
-            - Second Change
-  
+            ${{ github.event.pull_request.body }}
+
       - name: 'Deploy Production Environment'
         run: |
           echo "Deploy Production Environment"
