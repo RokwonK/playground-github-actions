@@ -26,11 +26,12 @@ jobs:
       - name: Get Tag
         id: get-tag
         run: |
+          echo "현재 브랜치 확인 - ${{ github.head_ref }}"
           branch=${{ steps.branch-names.outputs.current_branch }}
           new_tag="${branch#release/}"
+          new_tag=$(echo "${new_tag}" | sed 's/-/ /g')
 
           echo $new_tag
-          echo "그냥 가져와 보기 ${{ github.head_ref }}"
           echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
 
       - name: Check Tag

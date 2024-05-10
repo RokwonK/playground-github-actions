@@ -6,10 +6,10 @@ on:
       artifact:
         description: 'artifact type'
         required: true
-        default: 'api'
+        default: 'Api'
         options:
-          - 'api'
-          - 'batch'
+          - 'Api'
+          - 'Batch'
       versionup:
         description: 'version update type'
         required: true
@@ -32,7 +32,7 @@ jobs:
       - name: Get latest tag
         id: get-latest-tag
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }}-v*")
+          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }} v*")
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Version Up
@@ -54,5 +54,5 @@ jobs:
       - name: Create and push release branch
         run: |
           new_version=${{ steps.version-up.outputs.NEW_VERSION }}
-          git checkout -b release/${{ github.event.inputs.artifact}}-$new_version
-          git push origin release/${{ github.event.inputs.artifact}}-$new_version
+          git checkout -b release/${{ github.event.inputs.artifact}}-v$new_version
+          git push origin release/${{ github.event.inputs.artifact}}-v$new_version
