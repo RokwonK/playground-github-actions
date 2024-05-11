@@ -22,37 +22,34 @@ jobs:
           token: ${{ secrets.MY_TOKEN }}
           fetch-depth: 0
 
-      - name: Get latest tag
+      - name: Get Latest Tag
         id: get-latest-tag
         run: |
           latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }}-v*")
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
 
-      - name: Create and push hotfix branch
+      - name: Create New Version
+        id: create-new-version     
         run: |
           tag=${{ steps.get-latest-tag.outputs.LATEST_TAG }}
-          version_regex="([0-9]+\.[0-9]+\.[0-9]+)\+(\d+)"
-          if [[ $tag =~ $version_regex ]]; then
-              echo "${BASH_REMATCH[1]}"
-              echo "${BASH_REMATCH[2]}"
-              echo "${BASH_REMATCH[3]}"
-              
-              base_version="${BASH_REMATCH[1]}"
-              build_number=${BASH_REMATCH[2]}
-          else
-              base_version="$tag"
-              build_number=0
+
+          IFS='+' read -ra version_parts <<< "$tag"
+          version=${version_parts[0]}
+          fix_number=${version_parts[1]}
+
+          # 빌드넘버가 비어 있는 경우 0으로 설정
+          if [ -z "$fix_number" ]; then
+            fix_number=0
           fi
 
-          # 빌드 번호를 증가시키거나 +1을 붙여 새로운 버전 문자열 생성
-          if [ $build_number -eq 0 ]; then
-              new_version="$base_version+1"
-          else
-              new_build_number=$((build_number+1))
-              new_version="$base_version+$new_build_number"
-          fi
+          # 빌드넘버 증가
+          fix_number=$((fix_number + 1))
 
-          echo "$new_version"
+          # 새로운 버전 조합
+          new_version="${version}+${build_number}"
+          echo "NEW_VERSION=$latest_tag" >> $GITHUB_OUTPUT
 
-          git checkout -b hotfix/$new_version
-          git push origin hotfix/$new_version
+      - name: Create and push hotfix branch
+        run: |
+          git checkout -b hotfix/${{ steps.create-new-version.outputs.NEW_VERSION }}
+          git push origin hotfix/${{ steps.create-new-version.outputs.NEW_VERSION }}
