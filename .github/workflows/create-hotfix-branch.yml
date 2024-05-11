@@ -47,9 +47,7 @@ jobs:
 
           # 새로운 버전 조합
           new_version="${version}+${fix_number}"
-          echo $new_version
-          echo $new_version
-          echo "NEW_VERSION=$latest_tag" >> $GITHUB_OUTPUT
+          echo "NEW_VERSION=$new_version" >> $GITHUB_OUTPUT
 
       - name: Create and push hotfix branch
         run: |
