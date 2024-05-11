@@ -28,7 +28,7 @@ jobs:
         run: |
           branch=${{ needs.check-branch.outputs.current_branch }}
           new_tag="${branch#release/}"
-          new_tag="${branch#hotfix/}"
+          new_tag="${new_tag#hotfix/}"
           echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
 
       - name: Check Tag
