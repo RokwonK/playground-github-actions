@@ -34,14 +34,14 @@ jobs:
           version_regex="([0-9]+\.[0-9]+\.[0-9]+)\+(\d+)"
           if [[ $tag =~ $version_regex ]]; then
               base_version="${BASH_REMATCH[1]}"
-              build_number="${BASH_REMATCH[2]}"
+              build_number=${BASH_REMATCH[2]}
           else
               base_version="$tag"
-              build_number=""
+              build_number=0
           fi
 
           # 빌드 번호를 증가시키거나 +1을 붙여 새로운 버전 문자열 생성
-          if [ -z "$build_number" ]; then
+          if [ $build_number -eq 0 ]; then
               new_version="$base_version+1"
           else
               new_build_number=$((build_number+1))
