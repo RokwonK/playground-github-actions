@@ -11,11 +11,6 @@ on:
         options:
           - 'Api'
           - 'Batch'
-      version:
-        type: string
-        description: 'specitfy version'
-        required: true
-        default: '0.0.0'
 
 jobs:
   create-branch:
@@ -30,7 +25,7 @@ jobs:
       - name: Get latest tag
         id: get-latest-tag
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }}-v${{ github.event.inputs.version }}*")
+          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }}-v*")
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Create and push hotfix branch
