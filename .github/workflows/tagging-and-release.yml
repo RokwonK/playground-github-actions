@@ -1,0 +1,46 @@
+# Release나 Hotfix에서 merge 했을때만 실행
+name: Tagging and Release
+
+on: 
+  pull_request:
+    branches:
+      - develop
+    types:
+      - closed
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      current_branch: ${{ steps.branch-name.outputs.current_branch }}
+    steps:
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v8
+  
+  tagging-and-release:
+    needs: check-branch
+    runs-on: 'ubuntu-latest'
+    if: github.event.pull_request.merged == true && (startsWith(${{ needs.check-branch.outputs.current_branch }}, 'release/') || startsWith(${{ needs.check-branch.outputs.current_branch }}, 'hotfix/'))
+    steps:
+      - name: Get Tag
+        id: get-tag
+        run: |
+          branch=${{ needs.check-branch.outputs.current_branch }}
+          new_tag="${branch#release/}"
+          new_tag="${branch#hotfix/}"
+          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
+
+      - name: Check Tag
+        run: |
+          echo ${{ steps.get-tag.outputs.NEW_TAG }}
+
+      - name: Create Release & Tag 
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get-tag.outputs.NEW_TAG }}
+          release_name: ${{ steps.get-tag.outputs.NEW_TAG }}
+          body: |
+            ${{ github.event.pull_request.body }}

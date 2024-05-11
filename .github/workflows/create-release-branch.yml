@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       artifact:
+        type: choice
         description: 'artifact type'
         required: true
         default: 'Api'
@@ -11,7 +12,8 @@ on:
           - 'Api'
           - 'Batch'
       versionup:
-        description: 'version update type'
+        type: choice
+        description: 'version up type'
         required: true
         default: 'patch'
         options:
@@ -32,7 +34,7 @@ jobs:
       - name: Get latest tag
         id: get-latest-tag
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }} v*")
+          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }}-v*")
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Version Up

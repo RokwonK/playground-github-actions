@@ -1,0 +1,40 @@
+name: Create Hotfix Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact:
+        type: choice
+        description: 'artifact type'
+        required: true
+        default: 'Api'
+        options:
+          - 'Api'
+          - 'Batch'
+      version:
+        type: string
+        description: 'specitfy version'
+        required: true
+        default: '0.0.0'
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MY_TOKEN }}
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: get-latest-tag
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 --match "${{ github.event.inputs.artifact }}-v${{ github.event.inputs.version }}*")
+          echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
+
+      - name: Create and push hotfix branch
+        run: |
+          latest_tag=${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+          git checkout -b hotfix/${{ github.event.inputs.artifact}}-v${{ latest_tag }}+1
+          git push origin hotfix/${{ github.event.inputs.artifact}}-v${{ latest_tag }}+1
