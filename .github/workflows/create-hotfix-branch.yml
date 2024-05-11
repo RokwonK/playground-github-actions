@@ -31,5 +31,3 @@ jobs:
       - name: Create and push hotfix branch
         run: |
           latest_tag=${{ steps.get-latest-tag.outputs.LATEST_TAG }}
-          git checkout -b hotfix/${{ github.event.inputs.artifact}}-v${{ latest_tag }}+1
-          git push origin hotfix/${{ github.event.inputs.artifact}}-v${{ latest_tag }}+1
