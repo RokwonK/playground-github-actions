@@ -20,7 +20,7 @@ jobs:
 
   deploy-development-environment:
     needs: check-branch
-    if: startsWith(${{ needs.check-branch.outputs.current_branch}}, 'release/Api-v') || startsWith(${{ needs.check-branch.outputs.current_branch}}, 'hotfix/Api-v')
+    if: ${{ startsWith(needs.check-branch.outputs.current_branch, 'release/Api-v') || startsWith(needs.check-branch.outputs.current_branch, 'hotfix/Api-v') }} 
     runs-on: 'ubuntu-latest'
     steps:
       - name: Check out repository
